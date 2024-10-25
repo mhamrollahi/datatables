@@ -1,11 +1,82 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <title></title>
+    <link rel="stylesheet" href="/stylesheets/bootstrap.rtl.min.css" />
+    <link rel="stylesheet" href="/stylesheets/datatables.min.css" />
+
+    <link rel="stylesheet" href="/stylesheets/style.css" />
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <h1></h1>
+    <div class="row mb-30">
+      <div>salam </div>
+      <!-- Revenue Statistics Chart Start -->
+      <div class="col-md-12 mb-30">
+        <div class="box">
+          <div class="box-body table-responsive">
+            <div>
+              <p>Count :</p>
+              <p>ssss</p>
+            </div>
+
+            <table
+              class="table table table-striped table-hover table-bordered mb-0"
+              id="tblCodeTableList"
+            >
+              <!-- Table Head Start -->
+              <thead>
+                <tr class="table-primary d-flex">
+                  <th class="col-md-1">کد</th>
+                  <th class="col-md-3">نام انگلیسی جدول</th>
+                  <th class="col-md-3">نام فارسی جدول</th>
+                  <th class="col-md-2">تاریخ ایجاد</th>
+                  <th class="col-md-2">نام درخواست کنند</th>
+                </tr>
+              </thead>
+              <!-- Table Head End -->
+              <tbody></tbody>
+              <!-- Table Body Start -->
+
+              <!-- Table Body End -->
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- Revenue Statistics Chart End -->
+    </div>
+
+    <script src="/javascripts/jquery-3.3.1.min.js"></script>
+    <script src="/javascripts/bootstrap.min.js"></script>
+    <script src="/javascripts/datatables.min.js"></script>
+
+    <script>
+      $(document).ready(function () {
+        $("#tblCodeTableList").DataTable({
+          processing: true,
+          serverSide: true,
+          serverMethod: "get",
+          ajax: {
+            url: "./get_data",
+          },
+          searching: true,
+          ordering: true,
+          responsive: true,
+          pagingType: "full_numbers",
+          aaSorting: [],
+          columns: [
+            { data: "code" },
+            { data: "fa_TableName" },
+            { data: "en_TableName" },
+            { data: "fa_createdAt" },
+            { data: "creator" },
+          ],
+          language: {
+            search: "جستجوی داده‌های جدول ...:",
+            processing: "در حال بارگذاری داده از بانک اطلاعاتی ...",
+          },
+        });
+      });
+    </script>
   </body>
 </html>
