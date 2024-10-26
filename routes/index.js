@@ -4,36 +4,37 @@ const database = require("../database");
 const router = express.Router();
 
 /* GET home page. */
-router.get("/",async (req, res, next)=> {
+router.get("/", async (req, res, next) => {
   console.log("in / route ...");
 
   res.render("index");
 });
 
 router.get("/get_data", async (req, res, next) => {
-  let { draw, start, length, search } = req.query;
-
-  let order_data = req.query.order;
+  const { draw, start, length, search, order_data } = req.query;
 
   console.log("order_data = ", order_data);
 
-  let column_name ;
+  let column_name;
   let column_sort_order;
-  
-  if (order_data = "undefined") {
-    column_name = 'id'
-    column_sort_order = 'desc'
-    console.log('in if ... ', column_name,column_sort_order);
-  } else {
-    console.log("in else ...  order_data = ", order_data);
-    console.log("in else ...");
+  console.log(typeof order_data == 'undefined');
+  try {
+    if (typeof order_data == "undefined") {
+      column_name = "id";
+      column_sort_order = "desc";
+      console.log("in if order_data ....", column_name, column_sort_order);
+    } else {
+      // console.log("in else ...");
 
-    let column_index = req.query.order[0]["column"];
-    column_name = req.query.columns[column_index]["data"];
-    column_sort_order = req.query.order[0]["dir"];
+      let column_index = req.query.order[0]["column"];
+      column_name = req.query.columns[column_index]["data"];
+      column_sort_order = req.query.order[0]["dir"];
+      console.log("in else ...  order_data = ", column_name, column_sort_order);
+    }
+    console.log(column_name, column_sort_order);
+  } catch (error) {
+    next(error);
   }
-
-  console.log(column_name,column_sort_order);
 
   const search_value = req.query.search["value"];
 
@@ -44,19 +45,21 @@ router.get("/get_data", async (req, res, next) => {
     OR en_TableName LIKE '%${search_value}%'
     )`;
 
-  console.log("search_query = ", search_query);
+  // console.log("search_query = ", search_query);
 
   const data1 = await database.query(
     "SELECT COUNT(*) AS Total FROM CodeTableLists"
   );
 
-  console.log("in query ...  ", data1);
+  // console.log("in query ...  ", data1);
 
   const total_records = data1[0].Total;
 
-  const data2 = await database.query(`SELECT COUNT(*) AS Total FROM CodeTableLists WHERE 1 ${search_query}`);
+  const data2 = await database.query(
+    `SELECT COUNT(*) AS Total FROM CodeTableLists WHERE 1 ${search_query}`
+  );
 
-  console.log('in query 2  .... ', data2)
+  // console.log("in query 2  .... ", data2);
 
   const total_records_with_filter = data2[0].Total;
 
@@ -66,36 +69,35 @@ router.get("/get_data", async (req, res, next) => {
     LIMIT ${start} , ${length}
   `;
 
-  console.log("query  = ",query)
+  console.log("query  = ", query);
 
   let data_arr = [];
 
   const data3 = await database.query(query);
-  
-  console.log('data3 = ', data3);
 
-  
-
-  data3.forEach((row) => {
-    console.log(row)
-
+  for (let i = 0; i < data3[0].length; i++) {
     data_arr.push({
-      'code': row.code,
-      'en_TableName': row.en_TableName,
-      'fa_TableName': row.fa_TableName,
-      'creator': row.creator,
-      'fa_createdAt': row.createdAt,
+      id: data3[0][i].id,
+      code: data3[0][i].code,
+      en_TableName: data3[0][i].en_TableName,
+      fa_TableName: data3[0][i].fa_TableName,
+      creator: data3[0][i].creator,
+      fa_createdAt: data3[0][i].createdAt,
     });
-  });
+  }
 
-  console.log('data_arr = ',data_arr) 
+  // data3.forEach((row) => {
+  //   console.log("in forEach =", row.id);
 
+  // });
+
+  // console.log('data_arr = ',data_arr)
 
   const outPut = {
     draw: draw,
     iTotalRecords: total_records,
     iTotalDisplayRecords: total_records_with_filter,
-    aaData: data3,
+    aaData: data_arr,
   };
 
   res.json(outPut);

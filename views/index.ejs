@@ -26,16 +26,19 @@
             >
               <!-- Table Head Start -->
               <thead>
-                <tr class="table-primary d-flex">
-                  <th class="col-md-1">کد</th>
-                  <th class="col-md-3">نام انگلیسی جدول</th>
-                  <th class="col-md-3">نام فارسی جدول</th>
-                  <th class="col-md-2">تاریخ ایجاد</th>
-                  <th class="col-md-2">نام درخواست کنند</th>
+                <tr >
+                  <th>ID</th>
+                  <th>کد</th>
+                  <th>نام انگلیسی جدول</th>
+                  <th>نام فارسی جدول</th>
+                  <th>تاریخ ایجاد</th>
+                  <th>نام درخواست کنند</th>
                 </tr>
               </thead>
               <!-- Table Head End -->
-              <tbody></tbody>
+              <tbody>
+
+              </tbody>
               <!-- Table Body Start -->
 
               <!-- Table Body End -->
@@ -65,6 +68,7 @@
           pagingType: "full_numbers",
           aaSorting: [],
           columns: [
+            { data: "id" },
             { data: "code" },
             { data: "fa_TableName" },
             { data: "en_TableName" },
