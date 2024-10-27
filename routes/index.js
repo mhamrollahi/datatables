@@ -11,15 +11,15 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/get_data", async (req, res, next) => {
-  const { draw, start, length, search, order_data } = req.query;
+  const { draw, start, length, search, order } = req.query;
 
-  console.log("order_data = ", order_data);
+  console.log("order = ", order);
 
   let column_name;
   let column_sort_order;
-  console.log(typeof order_data == 'undefined');
+  console.log(typeof order == 'undefined');
   try {
-    if (typeof order_data == "undefined") {
+    if (typeof order == "undefined") {
       column_name = "id";
       column_sort_order = "desc";
       console.log("in if order_data ....", column_name, column_sort_order);
@@ -40,7 +40,7 @@ router.get("/get_data", async (req, res, next) => {
 
   const search_query = `
   AND (
-    id LIKE '%${search_value}%'
+    code LIKE '%${search_value}%'
     OR fa_TableName LIKE '%${search_value}%'
     OR en_TableName LIKE '%${search_value}%'
     )`;
@@ -82,7 +82,7 @@ router.get("/get_data", async (req, res, next) => {
       en_TableName: data3[0][i].en_TableName,
       fa_TableName: data3[0][i].fa_TableName,
       creator: data3[0][i].creator,
-      fa_createdAt: data3[0][i].createdAt,
+      createdAt: data3[0][i].createdAt,
     });
   }
 
