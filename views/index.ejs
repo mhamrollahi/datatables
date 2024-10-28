@@ -29,8 +29,8 @@
                 <tr >
                   <th>ID</th>
                   <th>کد</th>
-                  <th>نام انگلیسی جدول</th>
                   <th>نام فارسی جدول</th>
+                  <th>نام انگلیسی جدول</th>
                   <th>تاریخ ایجاد</th>
                   <th>نام درخواست کنند</th>
                 </tr>
@@ -50,8 +50,8 @@
     </div>
 
     <script src="/javascripts/jquery-3.3.1.min.js"></script>
-    <script src="/javascripts/bootstrap.min.js"></script>
     <script src="/javascripts/datatables.min.js"></script>
+    <script src="/javascripts/bootstrap.min.js"></script>
 
     <script>
       $(document).ready(function () {
@@ -67,7 +67,17 @@
           responsive: true,
           columns: [
             { data: "id" ,name:'id'},
-            { data: "code",name:'code' },
+            { data: "code",name:'code',
+              mRender:function(data){
+                if(data % 2 == 0){
+                  return '<span class = "badge badge-sucees">${code}</span>'
+                }
+                else{
+                return '<span class = "badge badge-dark">${data}</span>'
+              }
+
+              }
+             },
             { data: "fa_TableName",name:'fa_TableName' },
             { data: "en_TableName",name:'en_TableName' },
             { data: "createdAt",name:'createdAt' },
